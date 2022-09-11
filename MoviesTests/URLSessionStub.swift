@@ -6,21 +6,24 @@
 //
 
 typealias DataTaskCompletionHandler = (Data?, URLResponse?, Error?) -> Void
+typealias DownloadTaskCompletionHandler = (URL?, URLResponse?, Error?) -> Void
 
 import Foundation
 
 @testable import Movies
 
 class URLSessionStub: URLSessionProtocol {
-  private let stubbedData: Data?
+  private let stubbedData: [Data]
   private var stubbedResponse: URLResponse? = nil
   private var stubbedError: Error? = nil
-  public var calledURL: String!
+  private var requestCount: Int = 0
+  public var calledURLs: [String] = []
+ 
 
-  public init(data: Data? = nil, error: Error? = nil) {
-    self.stubbedData = data
-    self.stubbedError = error
-    self.stubbedResponse = nil
+  public init(data: [Data] = [], error: Error? = nil) {
+        self.stubbedData = data
+        self.stubbedError = error
+        self.stubbedResponse = nil
   }
 
   public func dataTask(
@@ -29,9 +32,11 @@ class URLSessionStub: URLSessionProtocol {
   ) -> URLSessionDataTask {
       
     stubbedResponse = HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)
-    calledURL = request.url!.absoluteString
+    calledURLs.append(request.url!.absoluteString)
+    let data = stubbedData[requestCount]
+    requestCount += 1
     return URLSessionDataTaskStub(
-      stubbedData: stubbedData,
+      stubbedData: data,
       stubbedResponse: stubbedResponse,
       stubbedError: stubbedError,
       completionHandler: completionHandler

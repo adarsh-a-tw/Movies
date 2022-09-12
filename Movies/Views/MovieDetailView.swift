@@ -17,21 +17,18 @@ struct MovieDetailView: View {
     
     var body: some View {
         ScrollView {
-            AsyncImage(url: URL(string: movie.logoURL)) { phase in
-                if let image = phase.image {
-                    image.resizable().cornerRadius(15)
-                }
-                else if phase.error != nil {
-                    
-                }
-                else {
-                    ProgressView().foregroundColor(.orange)
-                }
-            }.aspectRatio(2/3,contentMode: .fit)
-            Text(movie.title).font(.largeTitle).foregroundColor(.orange).multilineTextAlignment(.center).padding()
-            RatingView(rating: movie.rating).padding()
-            Text(movie.description).padding().foregroundColor(Color.white)
-        }.background(Color.black).padding(0)
+            MovieTileView(movie: movie)
+            Text(movie.title)
+                .font(.largeTitle)
+                .foregroundColor(.orange)
+                .multilineTextAlignment(.center)
+                .padding()
+            RatingView(rating: movie.rating)
+                .padding()
+            Text(movie.description)
+                .padding()
+                .foregroundColor(.gray)
+        }.background(.black)
     }
 }
 

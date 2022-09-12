@@ -11,6 +11,6 @@ struct Movie : Equatable {
     let id: String
     let title: String
     let description: String
-    var logo: Data!
+    var logoURL: String
     let rating: Float
 }

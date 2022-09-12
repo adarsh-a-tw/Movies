@@ -8,10 +8,19 @@
 import Foundation
 
 class MovieViewModel : ObservableObject {
-    private var apiService: MovieAPIService
-    @Published private(set) var movies: [Movie] = []
+    private var apiService: APIServiceProtocol
+    @Published var movies: [Movie] = []
+    @Published var error: Error? = nil
     
-    init(apiService:MovieAPIService) {
+    init(apiService:APIServiceProtocol = MovieAPIService()) {
         self.apiService = apiService
+        apiService.getMovies { movies, error in
+            guard error == nil else {
+                self.error = error
+                return
+            }
+            self.movies = movies!
+        }
     }
+    
 }

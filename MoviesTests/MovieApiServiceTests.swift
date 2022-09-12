@@ -16,12 +16,7 @@ class MovieApiServiceTests: XCTestCase {
 
     override func setUpWithError() throws {
         try super.setUpWithError()
-        let stubbedData = [
-            TestConstants.MovieData,
-            TestConstants.rawImageData1,
-            TestConstants.rawImageData2
-        ]
-        session = URLSessionStub(data: stubbedData, error: nil)
+        session = URLSessionStub(data: TestConstants.MovieData, error: nil)
         sut = MovieAPIService(session:session)
     }
 
@@ -35,10 +30,10 @@ class MovieApiServiceTests: XCTestCase {
         sut.getMovies {
             (data:[Movie]?, error:Error?) -> Void in
                 if let data = data {
+                    print(data)
+                    print(TestConstants.movies)
                     XCTAssert(data == TestConstants.movies)
-                    XCTAssert(self.session.calledURLs[0] == Constants.MovieAPIUrl)
-                    XCTAssert(self.session.calledURLs[1] == TestConstants.moviePosterURLs[0])
-                    XCTAssert(self.session.calledURLs[2] == TestConstants.moviePosterURLs[1])
+                    XCTAssert(self.session.calledURL == Constants.MovieAPIUrl)
                     promise.fulfill()
                 }
         }

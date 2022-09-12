@@ -13,17 +13,15 @@ import Foundation
 @testable import Movies
 
 class URLSessionStub: URLSessionProtocol {
-  private let stubbedData: [Data]
+  private let stubbedData: Data?
   private var stubbedResponse: URLResponse? = nil
   private var stubbedError: Error? = nil
-  private var requestCount: Int = 0
-  public var calledURLs: [String] = []
+  public var calledURL: String? = nil
  
 
-  public init(data: [Data] = [], error: Error? = nil) {
+  public init(data: Data?, error: Error? = nil) {
         self.stubbedData = data
         self.stubbedError = error
-        self.stubbedResponse = nil
   }
 
   public func dataTask(
@@ -32,11 +30,9 @@ class URLSessionStub: URLSessionProtocol {
   ) -> URLSessionDataTask {
       
     stubbedResponse = HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)
-    calledURLs.append(request.url!.absoluteString)
-    let data = stubbedData[requestCount]
-    requestCount += 1
+    calledURL = request.url!.absoluteString
     return URLSessionDataTaskStub(
-      stubbedData: data,
+      stubbedData: stubbedData,
       stubbedResponse: stubbedResponse,
       stubbedError: stubbedError,
       completionHandler: completionHandler

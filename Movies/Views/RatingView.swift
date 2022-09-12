@@ -11,9 +11,6 @@ struct RatingView: View {
     private let rating: Int
     private let maxRating = 5
     
-    var offColor = Color.gray
-    var onColor = Color.yellow
-    
     init(rating: Float) {
         self.rating = Int((rating/2).rounded())
     }
@@ -22,7 +19,7 @@ struct RatingView: View {
         HStack {
             ForEach(1...maxRating, id: \.self) { number in
                 Image(systemName: "star.fill")
-                        .foregroundColor(number > rating ? offColor : onColor)
+                    .foregroundColor(number > rating ? .gray : .yellow)
                 }
         }
     }

@@ -6,7 +6,6 @@
 //
 
 typealias DataTaskCompletionHandler = (Data?, URLResponse?, Error?) -> Void
-typealias DownloadTaskCompletionHandler = (URL?, URLResponse?, Error?) -> Void
 
 import Foundation
 

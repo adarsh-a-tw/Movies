@@ -29,10 +29,10 @@ struct ContentView: View {
                                     }
                                 })
                         }
-                    }.navigationTitle("Movies").background(Color.black).navigationBarTitleDisplayMode(/*@START_MENU_TOKEN@*/.inline/*@END_MENU_TOKEN@*/).toolbar {
+                    }.navigationTitle(Constants.ContentView.NavigationTitle).background(Color.black).navigationBarTitleDisplayMode(/*@START_MENU_TOKEN@*/.inline/*@END_MENU_TOKEN@*/).toolbar {
                         ToolbarItem(placement: .principal) {
                             VStack{
-                                Text("Movies")
+                                Text(Constants.ContentView.NavigationTitle)
                                     .font(.headline)
                                     .foregroundColor(.orange)
                             }
@@ -43,13 +43,13 @@ struct ContentView: View {
             else {
                 ZStack{
                 }.alert(isPresented: $movieViewModel.isError) {
-                    var errorMessage = "Could not fetch data"
+                    var errorMessage = Constants.ContentView.Alert.DefaultMessage
                     switch $movieViewModel.error.wrappedValue {
-                    case .networkError : errorMessage = "Check your internet connection."
-                    default: errorMessage = "Server sent an invalid response. Try again later."
+                    case .networkError : errorMessage = Constants.ContentView.Alert.NetworkErrorMessage
+                    default: errorMessage = Constants.ContentView.Alert.ServerErrorMessage
                     }
                     
-                    return Alert(title: Text("Error"), message: Text(errorMessage), dismissButton: .default(Text("Retry")){
+                    return Alert(title: Text(Constants.ContentView.Alert.Title), message: Text(errorMessage), dismissButton: .default(Text(Constants.ContentView.Alert.RetryButtonText)){
                         movieViewModel.loadMovies()
                     })
                 }.background(.black)

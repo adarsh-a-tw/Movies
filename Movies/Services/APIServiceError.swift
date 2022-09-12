@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum APIServiceError: Error {
+enum APIServiceError: Error ,Equatable{
     
     case networkError
     case emptyResponse

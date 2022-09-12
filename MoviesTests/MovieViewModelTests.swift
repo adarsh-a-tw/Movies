@@ -18,7 +18,6 @@ class MovieViewModelTests: XCTestCase {
 
     override func setUpWithError() throws {
         try super.setUpWithError()
-        apiService = MockMovieAPIService(movies: TestConstants.movies, success: true, error: nil)
     }
 
     override func tearDownWithError() throws {
@@ -26,9 +25,35 @@ class MovieViewModelTests: XCTestCase {
         sut = nil
     }
 
-    func testViewModelCreation() {
+    func testGetMoviesSuccess() {
+        let promise = expectation(description: "Waiting expectation")
+        apiService = MockMovieAPIService(movies: TestConstants.movies, success: true, error: nil)
         sut = MovieViewModel(apiService: apiService)
-        XCTAssert(sut.movies == TestConstants.movies)
+        
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {[weak sut] in
+            XCTAssert(sut!.movies == TestConstants.movies)
+            XCTAssertFalse(sut!.isLoading)
+            XCTAssertFalse(sut!.isError)
+            XCTAssertNil(sut!.error)
+            promise.fulfill()
+        }
+        wait(for: [promise], timeout: 2.0)
+    }
+    
+    func testGetMoviesFailure() {
+        let promise = expectation(description: "Waiting expectation")
+        apiService = MockMovieAPIService(movies: [], success: false, error: APIServiceError.networkError)
+        sut = MovieViewModel(apiService: apiService)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {[weak sut] in
+            XCTAssertTrue(sut!.isError)
+            XCTAssert(sut!.movies.count == 0)
+            XCTAssertFalse(sut!.isLoading)
+            XCTAssertEqual(sut!.error, APIServiceError.networkError)
+            promise.fulfill()
+        }
+        wait(for: [promise], timeout: 2.0)
     }
 }
 

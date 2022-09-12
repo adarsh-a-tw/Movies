@@ -16,12 +16,14 @@ class URLSessionStub: URLSessionProtocol {
   private let stubbedData: Data?
   private var stubbedResponse: URLResponse? = nil
   private var stubbedError: Error? = nil
+  private var statusCode: Int = 200
   public var calledURL: String? = nil
  
 
-  public init(data: Data?, error: Error? = nil) {
+  public init(data: Data?, error: Error? = nil, statusCode: Int = 200) {
         self.stubbedData = data
         self.stubbedError = error
+        self.statusCode = statusCode
   }
 
   public func dataTask(
@@ -29,7 +31,7 @@ class URLSessionStub: URLSessionProtocol {
     completionHandler: @escaping DataTaskCompletionHandler
   ) -> URLSessionDataTask {
       
-    stubbedResponse = HTTPURLResponse(url: request.url!, statusCode: 200, httpVersion: nil, headerFields: nil)
+    stubbedResponse = HTTPURLResponse(url: request.url!, statusCode: statusCode, httpVersion: nil, headerFields: nil)
     calledURL = request.url!.absoluteString
     return URLSessionDataTaskStub(
       stubbedData: stubbedData,

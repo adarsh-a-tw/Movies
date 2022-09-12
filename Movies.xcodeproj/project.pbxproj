@@ -29,6 +29,7 @@
 		C7A96C4728CEF0EA007AD632 /* MovieDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A96C4628CEF0EA007AD632 /* MovieDetailView.swift */; };
 		C7A96C4928CEF464007AD632 /* RatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A96C4828CEF464007AD632 /* RatingView.swift */; };
 		C7A96C4D28CF2339007AD632 /* AsyncImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A96C4C28CF2339007AD632 /* AsyncImageView.swift */; };
+		C7A96C4F28CF3592007AD632 /* APIServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7A96C4E28CF3592007AD632 /* APIServiceError.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +75,7 @@
 		C7A96C4628CEF0EA007AD632 /* MovieDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailView.swift; sourceTree = "<group>"; };
 		C7A96C4828CEF464007AD632 /* RatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingView.swift; sourceTree = "<group>"; };
 		C7A96C4C28CF2339007AD632 /* AsyncImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImageView.swift; sourceTree = "<group>"; };
+		C7A96C4E28CF3592007AD632 /* APIServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIServiceError.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -208,6 +210,7 @@
 				C7A96C3828CCB23E007AD632 /* URLSessionProtocol.swift */,
 				C7A96C3A28CCFE2E007AD632 /* APIResponse.swift */,
 				C7A96C4028CDE378007AD632 /* APIServiceProtocol.swift */,
+				C7A96C4E28CF3592007AD632 /* APIServiceError.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -351,6 +354,7 @@
 				C7A96C2F28CB75F4007AD632 /* MovieAPIService.swift in Sources */,
 				C7A96C4728CEF0EA007AD632 /* MovieDetailView.swift in Sources */,
 				C7A96C4928CEF464007AD632 /* RatingView.swift in Sources */,
+				C7A96C4F28CF3592007AD632 /* APIServiceError.swift in Sources */,
 				C7A96C2C28CB73CB007AD632 /* MovieViewModel.swift in Sources */,
 				C7A96C3B28CCFE2E007AD632 /* APIResponse.swift in Sources */,
 				C7A96BF228CB09B9007AD632 /* MoviesApp.swift in Sources */,

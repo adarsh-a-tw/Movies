@@ -19,7 +19,9 @@ class MovieViewModel : ObservableObject {
                 self.error = error
                 return
             }
-            self.movies = movies!
+            DispatchQueue.main.async {
+                self.movies = movies!
+            }
         }
     }
     

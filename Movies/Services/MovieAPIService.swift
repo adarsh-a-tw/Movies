@@ -17,11 +17,34 @@ class MovieAPIService: APIServiceProtocol {
     func getMovies(completionHandler :@escaping ([Movie]? ,Error?) -> Void) {
         let request = URLRequest(url: URL(string:Constants.MovieAPIUrl)!)
         let task = session.dataTask(with: request) { ( data: Data?, response: URLResponse? ,error: Error?) in
+            if error != nil {
+                completionHandler(nil,APIServiceError.networkError)
+                return
+            }
+            
+            guard let response = response else {
+                completionHandler(nil,APIServiceError.emptyResponse)
+                return
+            }
+
+
+            if let response = response as? HTTPURLResponse {
+                if !((200...299).contains(response.statusCode)) {
+                    completionHandler(nil,APIServiceError.badServerResponse(response.statusCode))
+                    return
+                }
+            }
+            
+            guard let data = data else {
+                completionHandler(nil,APIServiceError.emptyResponse)
+                return
+            }
+
             do {
-                try completionHandler(self.convertToMovies(data: data!),error)
+                try completionHandler(self.convertToMovies(data: data),nil)
             }
             catch {
-                completionHandler(nil,error)
+                completionHandler(nil,APIServiceError.decodingError)
             }
         }
         task.resume()

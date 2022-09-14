@@ -35,13 +35,13 @@ class MovieViewModelTests: XCTestCase {
             XCTAssert(sut!.movies == TestConstants.movies)
             XCTAssertFalse(sut!.isLoading)
             XCTAssertFalse(sut!.isError)
-            XCTAssertNil(sut!.error)
+            XCTAssertNil(sut!.errorMessage)
             promise.fulfill()
         }
         wait(for: [promise], timeout: 2.0)
     }
     
-    func testGetMoviesFailure() {
+    func testGetMoviesFailureDueToNetworkError() {
         let promise = expectation(description: "Waiting expectation")
         apiService = MockMovieAPIService(movies: [], success: false, error: APIServiceError.networkError)
         sut = MovieViewModel(apiService: apiService)
@@ -50,7 +50,22 @@ class MovieViewModelTests: XCTestCase {
             XCTAssertTrue(sut!.isError)
             XCTAssert(sut!.movies.count == 0)
             XCTAssertFalse(sut!.isLoading)
-            XCTAssertEqual(sut!.error, APIServiceError.networkError)
+            XCTAssertEqual(sut!.errorMessage, Constants.ContentView.Alert.NetworkErrorMessage)
+            promise.fulfill()
+        }
+        wait(for: [promise], timeout: 2.0)
+    }
+    
+    func testGetMoviesFailureDueToOtherAPIError() {
+        let promise = expectation(description: "Waiting expectation")
+        apiService = MockMovieAPIService(movies: [], success: false, error: APIServiceError.badServerResponse(500))
+        sut = MovieViewModel(apiService: apiService)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {[weak sut] in
+            XCTAssertTrue(sut!.isError)
+            XCTAssert(sut!.movies.count == 0)
+            XCTAssertFalse(sut!.isLoading)
+            XCTAssertEqual(sut!.errorMessage, Constants.ContentView.Alert.ServerErrorMessage)
             promise.fulfill()
         }
         wait(for: [promise], timeout: 2.0)

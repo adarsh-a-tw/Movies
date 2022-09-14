@@ -10,7 +10,7 @@ import Foundation
 class MovieViewModel : ObservableObject {
     private var apiService: APIServiceProtocol
     @Published var movies: [Movie] = []
-    @Published var error: APIServiceError? = nil
+    @Published var errorMessage: String? = nil
     @Published var isError: Bool = false
     @Published var isLoading: Bool = true
     
@@ -23,10 +23,17 @@ class MovieViewModel : ObservableObject {
         apiService.getMovies(completionHandler: completionHandler)
     }
     
-    func completionHandler(movies: [Movie]?,error: Error?) {
+    private func completionHandler(movies: [Movie]?,error: Error?) {
         guard error == nil else {
+            let apiServiceError = error as! APIServiceError
+            let errorMessage = { ()-> String in
+                switch apiServiceError {
+                    case .networkError : return Constants.ContentView.Alert.NetworkErrorMessage
+                    default: return Constants.ContentView.Alert.ServerErrorMessage
+                }
+            }()
             DispatchQueue.main.async { [weak self] in
-                self?.error = error as? APIServiceError
+                self?.errorMessage = errorMessage
                 self?.isLoading = false
                 self?.isError = true
             }
@@ -36,7 +43,7 @@ class MovieViewModel : ObservableObject {
             self?.movies = movies!
             self?.isLoading = false
             self?.isError = false
-            self?.error = nil
+            self?.errorMessage = nil
         }
     }
     

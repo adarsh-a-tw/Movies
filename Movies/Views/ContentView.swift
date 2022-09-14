@@ -13,49 +13,62 @@ struct ContentView: View {
     
     var body: some View {
         if $movieViewModel.isLoading.wrappedValue {
-            ZStack {
-                ProgressView().foregroundColor(.orange)
-            }.background(.black)
+            loadingView
         }
         else {
             if !$movieViewModel.isError.wrappedValue {
-                NavigationView {
-                    ScrollView {
-                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 150))]) {
-                                ForEach($movieViewModel.movies.wrappedValue,id: \.self.id,content: {
-                                    movie in
-                                    NavigationLink(destination: MovieDetailView(movie: movie).padding(0)) {
-                                        MovieTileView(movie: movie)
-                                    }
-                                })
-                        }
-                    }.navigationTitle(Constants.ContentView.NavigationTitle).background(Color.black).navigationBarTitleDisplayMode(/*@START_MENU_TOKEN@*/.inline/*@END_MENU_TOKEN@*/).toolbar {
-                        ToolbarItem(placement: .principal) {
-                            VStack{
-                                Text(Constants.ContentView.NavigationTitle)
-                                    .font(.headline)
-                                    .foregroundColor(.orange)
-                            }
-                        }
-                    }
-                }
+                    navigationView
             }
             else {
-                ZStack{
-                }.alert(isPresented: $movieViewModel.isError) {
-                    var errorMessage = Constants.ContentView.Alert.DefaultMessage
-                    switch $movieViewModel.error.wrappedValue {
-                    case .networkError : errorMessage = Constants.ContentView.Alert.NetworkErrorMessage
-                    default: errorMessage = Constants.ContentView.Alert.ServerErrorMessage
-                    }
-                    
-                    return Alert(title: Text(Constants.ContentView.Alert.Title), message: Text(errorMessage), dismissButton: .default(Text(Constants.ContentView.Alert.RetryButtonText)){
-                        movieViewModel.loadMovies()
-                    })
-                }.background(.black)
+                errorView
             }
         }
     }
+    
+    
+    var loadingView: some View {
+        ZStack {
+            ProgressView().foregroundColor(.orange)
+        }.background(.black)
+    }
+    
+    var navigationView: some View {
+        NavigationView {
+            ScrollView {
+                gridView
+            }.navigationTitle(Constants.ContentView.NavigationTitle)
+             .background(Color.black).navigationBarTitleDisplayMode(/*@START_MENU_TOKEN@*/.inline/*@END_MENU_TOKEN@*/).toolbar {
+                 ToolbarItem(placement: .principal) {
+                     VStack{
+                         Text(Constants.ContentView.NavigationTitle)
+                             .font(.headline)
+                             .foregroundColor(.orange)
+                     }
+                 }
+             }
+        }
+    }
+    
+    var errorView: some View {
+        ZStack{
+        }.alert(isPresented: $movieViewModel.isError) {
+            Alert(title: Text(Constants.ContentView.Alert.Title), message: Text($movieViewModel.errorMessage.wrappedValue!), dismissButton: .default(Text(Constants.ContentView.Alert.RetryButtonText)){
+                movieViewModel.loadMovies()
+            })
+        }.background(.black)
+    }
+    
+    var gridView: some View {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 150))]) {
+                ForEach($movieViewModel.movies.wrappedValue,id: \.self.id,content: {
+                    movie in
+                    NavigationLink(destination: MovieDetailView(movie: movie).padding(0)) {
+                        MovieTileView(movie: movie)
+                    }
+                })
+        }
+    }
+    
 }
 
 struct ContentView_Previews: PreviewProvider {

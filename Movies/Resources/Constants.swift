@@ -18,7 +18,6 @@ struct Constants {
         struct Alert {
             
             static let Title = "Error"
-            static let DefaultMessage = "Could not fetch data"
             static let NetworkErrorMessage = "Check your internet connection."
             static let ServerErrorMessage = "Server sent an invalid response. Try again later."
             static let RetryButtonText = "Retry"

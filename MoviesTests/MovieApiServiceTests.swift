@@ -30,7 +30,6 @@ class MovieApiServiceTests: XCTestCase {
         sut.getMovies {
             (data:[Movie]?, error:Error?) -> Void in
                 if let data = data {
-                    print(TestConstants.movies)
                     XCTAssert(data == TestConstants.movies)
                     XCTAssert(self.session.calledURL == Constants.MovieAPIUrl)
                     promise.fulfill()

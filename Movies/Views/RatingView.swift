@@ -38,7 +38,7 @@ struct RatingView: View {
                         )
                         .mask(star)
                 }
-        }
+           }
         }
     }
 

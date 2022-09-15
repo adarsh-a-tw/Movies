@@ -28,7 +28,7 @@ struct ContentView: View {
     
     var loadingView: some View {
         ZStack {
-            ProgressView().foregroundColor(.orange)
+            ProgressView().tint(.orange)
         }.background(.black)
     }
     

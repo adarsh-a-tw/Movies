@@ -23,17 +23,19 @@ class MovieViewModel : ObservableObject {
         apiService.getMovies(completionHandler: completionHandler)
     }
     
-    private func completionHandler(movies: [Movie]?,error: Error?) {
-        guard error == nil else {
-            let apiServiceError = error as! APIServiceError
-            let errorMessage = getErrorMessage(apiServiceError: apiServiceError)
+    private func completionHandler(movies: [Movie]?,error: APIServiceError?) {
+        guard let movies = movies else {
+            let errorMessage = getErrorMessage(apiServiceError: error)
             setError(errorMessage: errorMessage)
             return
         }
-        setData(movies: movies!)
+        setData(movies: movies)
     }
     
-    private func getErrorMessage(apiServiceError: APIServiceError) -> String{
+    private func getErrorMessage(apiServiceError: APIServiceError?) -> String{
+        guard let apiServiceError = apiServiceError else {
+            return Constants.ContentView.Alert.UnknownErrorMessage
+        }
         switch apiServiceError {
             case .networkError : return Constants.ContentView.Alert.NetworkErrorMessage
             default: return Constants.ContentView.Alert.ServerErrorMessage

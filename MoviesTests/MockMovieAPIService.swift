@@ -10,20 +10,20 @@
 class MockMovieAPIService: APIServiceProtocol {
     private let movies: [Movie]
     private let success: Bool
-    private let error: Error?
+    private let error: APIServiceError?
     
-    init(movies: [Movie],success: Bool = true, error: Error? = nil){
+    init(movies: [Movie],success: Bool = true, error: APIServiceError? = nil){
         self.movies = movies
         self.success = success
         self.error = error
     }
     
-    func getMovies(completionHandler: @escaping ([Movie]?, Error?) -> Void) {
+    func getMovies(completionHandler: @escaping ([Movie]?, APIServiceError?) -> Void) {
         if(success){
             completionHandler(movies,nil)
         }
         else {
-            completionHandler([], error)
+            completionHandler(nil, error)
         }
     }
 }

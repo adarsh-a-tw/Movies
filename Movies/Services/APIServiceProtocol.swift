@@ -8,5 +8,5 @@
 import Foundation
 
 protocol APIServiceProtocol {
-    func getMovies(completionHandler :@escaping ([Movie]? ,Error?) -> Void)
+    func getMovies(completionHandler :@escaping ([Movie]? ,APIServiceError?) -> Void)
 }

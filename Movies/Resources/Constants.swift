@@ -20,6 +20,7 @@ struct Constants {
             static let Title = "Error"
             static let NetworkErrorMessage = "Check your internet connection."
             static let ServerErrorMessage = "Server sent an invalid response. Try again later."
+            static let UnknownErrorMessage = "Unknown Error."
             static let RetryButtonText = "Retry"
         
         }

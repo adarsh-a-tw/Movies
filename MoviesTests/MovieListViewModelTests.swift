@@ -1,5 +1,5 @@
 //
-//  MovieViewModelTests.swift
+//  MovieListViewModelTests.swift
 //  MoviesTests
 //
 //  Created by Adarsh A on 11/09/22.
@@ -11,9 +11,9 @@ import XCTest
 
 @testable import Movies
 
-class MovieViewModelTests: XCTestCase {
+class MovieListViewModelTests: XCTestCase {
     
-    var sut: MovieViewModel!
+    var sut: MovieListViewModel!
     var apiService: MockMovieAPIService!
 
     override func setUpWithError() throws {
@@ -28,11 +28,11 @@ class MovieViewModelTests: XCTestCase {
     func testGetMoviesSuccess() {
         let promise = expectation(description: "Waiting expectation")
         apiService = MockMovieAPIService(movies: TestConstants.movies, success: true, error: nil)
-        sut = MovieViewModel(apiService: apiService)
+        sut = MovieListViewModel(apiService: apiService)
         
         
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {[weak sut] in
-            XCTAssert(sut!.movies == TestConstants.movies)
+            XCTAssert(sut!.movies == TestConstants.movieViewModels)
             XCTAssertFalse(sut!.isLoading)
             XCTAssertFalse(sut!.isError)
             XCTAssertNil(sut!.errorMessage)
@@ -44,7 +44,7 @@ class MovieViewModelTests: XCTestCase {
     func testGetMoviesFailureDueToNetworkError() {
         let promise = expectation(description: "Waiting expectation")
         apiService = MockMovieAPIService(movies: [], success: false, error: APIServiceError.networkError)
-        sut = MovieViewModel(apiService: apiService)
+        sut = MovieListViewModel(apiService: apiService)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {[weak sut] in
             XCTAssertTrue(sut!.isError)
@@ -59,7 +59,7 @@ class MovieViewModelTests: XCTestCase {
     func testGetMoviesFailureDueToOtherAPIError() {
         let promise = expectation(description: "Waiting expectation")
         apiService = MockMovieAPIService(movies: [], success: false, error: APIServiceError.badServerResponse(500))
-        sut = MovieViewModel(apiService: apiService)
+        sut = MovieListViewModel(apiService: apiService)
         
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {[weak sut] in
             XCTAssertTrue(sut!.isError)

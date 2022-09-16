@@ -9,14 +9,14 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @EnvironmentObject var movieViewModel: MovieViewModel
+    @EnvironmentObject var viewModel: MovieListViewModel
     
     var body: some View {
-        if $movieViewModel.isLoading.wrappedValue {
+        if viewModel.isLoading {
             loadingView
         }
         else {
-            if !$movieViewModel.isError.wrappedValue {
+            if !viewModel.isError {
                     navigationView
             }
             else {
@@ -36,8 +36,11 @@ struct ContentView: View {
         NavigationView {
             ScrollView {
                 gridView
-            }.navigationTitle(Constants.ContentView.NavigationTitle)
-             .background(Color.black).navigationBarTitleDisplayMode(/*@START_MENU_TOKEN@*/.inline/*@END_MENU_TOKEN@*/).toolbar {
+            }
+            .navigationTitle(Constants.ContentView.NavigationTitle)
+            .background(Color.black)
+            .navigationBarTitleDisplayMode(/*@START_MENU_TOKEN@*/.inline/*@END_MENU_TOKEN@*/)
+            .toolbar {
                  ToolbarItem(placement: .principal) {
                      VStack{
                          Text(Constants.ContentView.NavigationTitle)
@@ -45,27 +48,30 @@ struct ContentView: View {
                              .foregroundColor(.orange)
                      }
                  }
-             }
+            }
         }
+        .accentColor(.orange)
     }
     
     var errorView: some View {
         ZStack{
-        }.alert(isPresented: $movieViewModel.isError) {
-            Alert(title: Text(Constants.ContentView.Alert.Title), message: Text($movieViewModel.errorMessage.wrappedValue ?? Constants.ContentView.Alert.UnknownErrorMessage), dismissButton: .default(Text(Constants.ContentView.Alert.RetryButtonText)){
-                movieViewModel.loadMovies()
+        }
+        .alert(isPresented: $viewModel.isError) {
+            Alert(title: Text(Constants.ContentView.Alert.Title), message: Text($viewModel.errorMessage.wrappedValue ?? Constants.ContentView.Alert.UnknownErrorMessage), dismissButton: .default(Text(Constants.ContentView.Alert.RetryButtonText)){
+                viewModel.loadMovies()
             })
-        }.background(.black)
+        }
+        .background(.black)
     }
     
     var gridView: some View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 150))]) {
-                ForEach($movieViewModel.movies.wrappedValue,id: \.self.id,content: {
-                    movie in
-                    NavigationLink(destination: MovieDetailView(movie: movie).padding(0)) {
-                        MovieTileView(movie: movie)
-                    }
-                })
+            ForEach(viewModel.movies){
+                movie in
+                NavigationLink(destination: MovieView(viewModel: movie).padding(0)) {
+                    MovieTileView(viewModel: movie.tileViewModel)
+                }
+            }
         }
     }
     
@@ -73,9 +79,12 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        let movieViewModel = MovieViewModel()
+        let viewModel = MovieListViewModel()
         Group {
-            ContentView().previewDevice("iPhone 13").environmentObject(movieViewModel).previewInterfaceOrientation(.portrait)
+            ContentView()
+                .previewDevice("iPhone 13")
+                .environmentObject(viewModel)
+                .previewInterfaceOrientation(.portrait)
         }
     }
 }

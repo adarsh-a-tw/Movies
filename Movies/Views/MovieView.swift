@@ -7,39 +7,40 @@
 
 import SwiftUI
 
-struct MovieDetailView: View {
+struct MovieView: View {
     
-    private var movie: Movie
+    private var viewModel: MovieViewModel
     
-    init(movie: Movie) {
-        self.movie = movie
+    init(viewModel: MovieViewModel) {
+        self.viewModel = viewModel
     }
     
     var body: some View {
         ScrollView {
-            MovieTileView(movie: movie)
-            Text(movie.title)
+            MovieTileView(viewModel: viewModel.tileViewModel)
+            Text(viewModel.title)
                 .font(.largeTitle)
                 .foregroundColor(.orange)
                 .multilineTextAlignment(.center)
                 .padding()
-            RatingView(rating: movie.rating)
+            RatingView(rating: viewModel.rating)
                 .padding()
-            Text(movie.description)
+            Text(viewModel.description)
                 .padding()
                 .foregroundColor(.gray)
-        }.background(.black)
+        }
+        .background(.black)
     }
 }
 
 struct MovieDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        MovieDetailView(
-            movie: Movie(
+        MovieView(
+            viewModel: MovieViewModel(movie:  Movie(
                 id: "1",
                 title: "El Camino' Cooks Up 'Breaking Bad' Easter Eggs",
                 description: "On this spoiler-filled IMDbrief, we break bad and break down the Breaking Bad finale part two: 'El Camino' (2019).",
                 logoURL: "https://upload.wikimedia.org/wikipedia/en/4/4e/El_camino_bb_film_poster.jpg",
-                rating: 7.1))
+                rating: 7.1)))
     }
 }

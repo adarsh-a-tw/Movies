@@ -50,4 +50,7 @@ struct TestConstants {
               logoURL: "https://en.wikipedia.org/wiki/File:HelloDollyFilmPoster.jpg",
               rating: 7.1)
     ]
+    
+    static let movieViewModels = movies.map(MovieViewModel.init)
+    
 }

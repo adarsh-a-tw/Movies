@@ -1,62 +1,27 @@
 //
-//  MovieViewModel.swift
+//  MovieDetailViewModel.swift
 //  Movies
 //
-//  Created by Adarsh A on 09/09/22.
+//  Created by Adarsh A on 16/09/22.
 //
 
 import Foundation
 
-class MovieViewModel : ObservableObject {
-    private var apiService: APIServiceProtocol
-    @Published var movies: [Movie] = []
-    @Published var errorMessage: String? = nil
-    @Published var isError: Bool = false
-    @Published var isLoading: Bool = true
+struct MovieViewModel : Identifiable, Equatable {
     
-    init(apiService:APIServiceProtocol = MovieAPIService()) {
-        self.apiService = apiService
-        loadMovies()
+    private let movie: Movie
+    
+    init(movie: Movie) {
+        self.movie = movie
     }
     
-    func loadMovies() {
-        apiService.getMovies(completionHandler: completionHandler)
-    }
+    var id : String { movie.id }
+    var title: String { movie.title }
+    var description: String { movie.description }
+    var logoURL: String { movie.logoURL }
+    var rating: Float { movie.rating }
     
-    private func completionHandler(movies: [Movie]?,error: APIServiceError?) {
-        guard let movies = movies else {
-            let errorMessage = getErrorMessage(apiServiceError: error)
-            setError(errorMessage: errorMessage)
-            return
-        }
-        setData(movies: movies)
+    var tileViewModel : MovieTileViewModel {
+        MovieTileViewModel(movie: movie)
     }
-    
-    private func getErrorMessage(apiServiceError: APIServiceError?) -> String{
-        guard let apiServiceError = apiServiceError else {
-            return Constants.ContentView.Alert.UnknownErrorMessage
-        }
-        switch apiServiceError {
-            case .networkError : return Constants.ContentView.Alert.NetworkErrorMessage
-            default: return Constants.ContentView.Alert.ServerErrorMessage
-        }
-    }
-    
-    private func setError(errorMessage: String) {
-        DispatchQueue.main.async { [weak self] in
-            self?.errorMessage = errorMessage
-            self?.isLoading = false
-            self?.isError = true
-        }
-    }
-        
-    private func setData(movies: [Movie]) {
-        DispatchQueue.main.async { [weak self] in
-            self?.movies = movies
-            self?.isLoading = false
-            self?.isError = false
-            self?.errorMessage = nil
-        }
-    }
-    
 }

@@ -52,7 +52,7 @@ struct ContentView: View {
     var errorView: some View {
         ZStack{
         }.alert(isPresented: $movieViewModel.isError) {
-            Alert(title: Text(Constants.ContentView.Alert.Title), message: Text($movieViewModel.errorMessage.wrappedValue!), dismissButton: .default(Text(Constants.ContentView.Alert.RetryButtonText)){
+            Alert(title: Text(Constants.ContentView.Alert.Title), message: Text($movieViewModel.errorMessage.wrappedValue ?? Constants.ContentView.Alert.UnknownErrorMessage), dismissButton: .default(Text(Constants.ContentView.Alert.RetryButtonText)){
                 movieViewModel.loadMovies()
             })
         }.background(.black)

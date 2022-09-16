@@ -8,50 +8,22 @@
 import SwiftUI
 
 struct RatingView: View {
-    private let rating: Float
-    private let maxRating = 5
+    private let viewModel : RatingViewModel
     
     init(rating: Float) {
-        self.rating = rating/2.0
+        self.viewModel = RatingViewModel(rating: rating)
     }
-    
     
     var body: some View {
-     HStack {
-        ForEach(1...maxRating, id: \.self) { number in
-            let difference = Float(number) - rating
-            if Float(number) < rating {
-                 star.foregroundColor(.yellow)
+        HStack {
+            ForEach(0..<viewModel.stars.count,id: \.self) {
+                 viewModel.stars[$0]
             }
-            else if difference >= 1.0 {
-                 star.foregroundColor(.gray)
-            }
-            else {
-                ZStack(alignment:.leading) {
-                     star.foregroundColor(.gray)
-                        .overlay(
-                            GeometryReader {
-                                reader in
-                                Rectangle().foregroundColor(.yellow).frame(width: CGFloat(1 - difference)*reader.size.width)
-                            }
-                            
-                        )
-                        .mask(star)
-                }
-           }
         }
-    }
-
-    }
-    
-   
-    private var star: some View {
-        Image(systemName: "star.fill")
     }
 }
 
 struct RatingView_Previews: PreviewProvider {
-    
     static var previews: some View {
         RatingView(rating: 7.0)
     }

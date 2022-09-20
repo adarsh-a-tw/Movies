@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  MovieListView.swift
 //  Movies
 //
 //  Created by Adarsh A on 09/09/22.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct MovieListView: View {
     
     @EnvironmentObject var viewModel: MovieListViewModel
     
@@ -66,7 +66,7 @@ struct ContentView: View {
     
     var gridView: some View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 150))]) {
-            ForEach(viewModel.movies){
+            ForEach(viewModel.movies ?? []){
                 movie in
                 NavigationLink(destination: MovieView(viewModel: movie).padding(0)) {
                     MovieTileView(viewModel: movie.tileViewModel)
@@ -81,7 +81,7 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let viewModel = MovieListViewModel()
         Group {
-            ContentView()
+            MovieListView()
                 .previewDevice("iPhone 13")
                 .environmentObject(viewModel)
                 .previewInterfaceOrientation(.portrait)

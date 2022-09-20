@@ -9,7 +9,7 @@ import Foundation
 
 class MovieListViewModel : ObservableObject {
     private var apiService: APIServiceProtocol
-    @Published var movies: [MovieViewModel] = []
+    @Published var movies: [MovieViewModel]? = nil
     @Published var errorMessage: String? = nil
     @Published var isError: Bool = false
     @Published var isLoading: Bool = true
@@ -44,6 +44,7 @@ class MovieListViewModel : ObservableObject {
     
     private func setError(errorMessage: String) {
         DispatchQueue.main.async { [weak self] in
+            self?.movies = nil
             self?.errorMessage = errorMessage
             self?.isLoading = false
             self?.isError = true

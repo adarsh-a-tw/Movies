@@ -48,7 +48,7 @@ class MovieListViewModelTests: XCTestCase {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {[weak sut] in
             XCTAssertTrue(sut!.isError)
-            XCTAssert(sut!.movies.count == 0)
+            XCTAssertNil(sut!.movies)
             XCTAssertFalse(sut!.isLoading)
             XCTAssertEqual(sut!.errorMessage, Constants.ContentView.Alert.NetworkErrorMessage)
             promise.fulfill()
@@ -63,7 +63,7 @@ class MovieListViewModelTests: XCTestCase {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {[weak sut] in
             XCTAssertTrue(sut!.isError)
-            XCTAssert(sut!.movies.count == 0)
+            XCTAssertNil(sut!.movies)
             XCTAssertFalse(sut!.isLoading)
             XCTAssertEqual(sut!.errorMessage, Constants.ContentView.Alert.ServerErrorMessage)
             promise.fulfill()

@@ -12,7 +12,7 @@ struct MoviesApp: App {
     @StateObject var viewModel = MovieListViewModel()
     var body: some Scene {
         WindowGroup {
-            ContentView().environmentObject(viewModel)
+            MovieListView().environmentObject(viewModel)
         }
     }
 }
